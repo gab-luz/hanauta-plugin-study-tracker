@@ -65,22 +65,39 @@ STUDY_STATE_FILE = (
 STUDY_TRACKER_APP = APP_DIR / "pyqt" / "study-tracker" / "study_tracker.py"
 SETTINGS_PAGE_SCRIPT = APP_DIR / "pyqt" / "settings-page" / "settings.py"
 
-STUDY_ICONS_DIR = ROOT / "assets" / "study-tracker-icons"
+PLUGIN_ROOT = Path(__file__).resolve().parent
+PLUGIN_ASSETS_DIR = PLUGIN_ROOT / "assets"
+CORE_STUDY_ICONS_DIR = ROOT / "assets" / "study-tracker-icons"
 
-MATERIAL_ICONS = {
-    "menu_book": STUDY_ICONS_DIR / "menu_book.svg",
-    "close": STUDY_ICONS_DIR / "close.svg",
-    "timer": STUDY_ICONS_DIR / "timer.svg",
-    "favorite": STUDY_ICONS_DIR / "favorite.svg",
-    "task_alt": STUDY_ICONS_DIR / "task_alt.svg",
-    "school": STUDY_ICONS_DIR / "school.svg",
-    "settings": STUDY_ICONS_DIR / "settings.svg",
-    "open_in_new": STUDY_ICONS_DIR / "open_in_new.svg",
-    "expand_more": STUDY_ICONS_DIR / "expand_more.svg",
-    "play_circle": STUDY_ICONS_DIR / "play_circle.svg",
-    "auto_awesome": STUDY_ICONS_DIR / "auto_awesome.svg",
-    "schedule": STUDY_ICONS_DIR / "schedule.svg",
-}
+MATERIAL_ICON_NAMES = (
+    "menu_book",
+    "close",
+    "timer",
+    "favorite",
+    "task_alt",
+    "school",
+    "settings",
+    "open_in_new",
+    "expand_more",
+    "play_circle",
+    "auto_awesome",
+    "schedule",
+)
+
+
+def _resolve_icon_path(name: str) -> Path | None:
+    candidates = (
+        PLUGIN_ASSETS_DIR / "study-tracker-icons" / f"{name}.svg",
+        PLUGIN_ASSETS_DIR / f"{name}.svg",
+        CORE_STUDY_ICONS_DIR / f"{name}.svg",
+    )
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
+
+
+MATERIAL_ICONS = {name: _resolve_icon_path(name) for name in MATERIAL_ICON_NAMES}
 
 MATERIAL_GLYPHS = {
     "menu_book": "\uead9",
